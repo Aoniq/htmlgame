@@ -15,12 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Display the points on the page
         document.getElementById('points').innerHTML = sessionStorage.getItem('points');
     }
+    sessionStorage.clear();
 });
 
 document.getElementById('startButton').addEventListener('click', () => {
     if (!gameRunning) {
+        sessionStorage.clear();
         const startMenu = document.getElementById('startMenu');
         const game = document.getElementById('game');
+        gameRunning = true; // Update game status
+
 
         // Add fade-out animation class to startMenu
         startMenu.classList.add('fade-out');
@@ -29,7 +33,6 @@ document.getElementById('startButton').addEventListener('click', () => {
         setTimeout(() => {
             game.style.display = 'block'; // Show the game container
             startMenu.style.display = 'none';
-            gameRunning = true; // Update game status
 
             init(); // Start the game
         }, 200); // Change this value to match the transition duration
@@ -67,14 +70,14 @@ function init() {
     createSprites();
     start();
 }
-// Event listener for keydown (spacebar)
+
+    // Event listener for keydown (spacebar)
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
         shootBullet();
     }
 });
-
-// Event listener for mouse click
+    // Event listener for mouse click
 document.addEventListener('mousedown', (event) => {
     if (event.button === 0) {
         // 0 represents the left mouse button
@@ -235,9 +238,14 @@ function shootBullet() {
 
 // Inside the resetGame function
 function resetGame() {
+    gameRunning = false; // Update game status
     // Save points to session storage
-    sessionStorage.setItem('points', points);
-
+    sessionStorage.setItem('points', points)
+    
+    setTimeout(() => {
     // Reload the page
     location.reload();
+}, 200); // Change this value to match the transition duration
+
+
 }
