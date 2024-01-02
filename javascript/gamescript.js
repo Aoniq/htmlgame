@@ -6,21 +6,25 @@ const interval = 1000 / fps;
 let sprites = [];
 let bullets = []; // Array to store bullets
 let points = 0;
+let gameRunning = false;
 
 document.getElementById('startButton').addEventListener('click', () => {
-    const startMenu = document.getElementById('startMenu');
-    const game = document.getElementById('game');
-    
-    // Add fade-out animation class to startMenu
-    startMenu.classList.add('fade-out');
-    
-    // Hide the button after the animation completes
-    setTimeout(() => {
-        game.style.display = 'block'; // Show the game container
-        startMenu.style.display = 'none';
-        
-        init(); // Start the game
-    }, 500); // Change this value to match the transition duration
+    if (!gameRunning) {
+        const startMenu = document.getElementById('startMenu');
+        const game = document.getElementById('game');
+
+        // Add fade-out animation class to startMenu
+        startMenu.classList.add('fade-out');
+
+        // Hide the button after the animation completes
+        setTimeout(() => {
+            game.style.display = 'block'; // Show the game container
+            startMenu.style.display = 'none';
+            gameRunning = true; // Update game status
+
+            init(); // Start the game
+        }, 200); // Change this value to match the transition duration
+    }
 });
 
 let rocket; // Declaring the rocket variable
@@ -77,7 +81,7 @@ function createSprites() {
         const posX = Math.random() * canvasWidth; // Willekeurige X-positie
         const posY = -50 - Math.random() * 200; // Willekeurige Y-positie boven het canvas
         const speedX = 0; // Snelheid horizontaal (nul voor recht naar beneden)
-        const speedY = 1 + Math.random() * 1; // Willekeurige verticale snelheid
+        const speedY = 0.1 + Math.random() * 1; // Willekeurige verticale snelheid
         const width = 50; // Breedte van de sprite
         const height = 50; // Hoogte van de sprite
         const url = 'image/meteor.png'; // URL van het meteorietbeeld
@@ -86,6 +90,7 @@ function createSprites() {
         sprites.push(sprite);
     }
 }
+
 
 let keys = {};
 
@@ -152,7 +157,7 @@ function update() {
             const posX = Math.random() * canvasWidth;
             const posY = -50 - Math.random() * 200;
             const speedX = 0;
-            const speedY = 1 + Math.random() * 1;
+            const speedY = 0.1 + Math.random() * 1;
             const width = 50;
             const height = 50;
             const url = 'image/meteor.png';
@@ -184,7 +189,21 @@ function update() {
 
     for (const sprite of sprites) {
         if (sprite !== rocket && !sprite.destroyed && checkCollision(rocket, sprite)) {
-            location.reload(); // Reload the page on collision
+            document.getElementById('scored').style.display = 'block';
+            document.getElementById('points').innerHTML = points;
+            // Display the start menu
+            const startMenu = document.getElementById('startMenu');
+            const game = document.getElementById('game');
+            game.style.display = 'none';
+            startMenu.style.display = 'flex';
+            startMenu.classList.remove('fade-out');
+            gameRunning = false;
+            // Reset canvas and variables
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            bullets = [];
+            sprites = [];
+            points = 0;
+            
         }
     }
 }
