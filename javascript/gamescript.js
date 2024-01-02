@@ -8,6 +8,15 @@ let bullets = []; // Array to store bullets
 let points = 0;
 let gameRunning = false;
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if there are points in session storage
+    if (sessionStorage.getItem('points')) {
+        document.getElementById('scored').style.display = 'block'; // Show the points container
+        // Display the points on the page
+        document.getElementById('points').innerHTML = sessionStorage.getItem('points');
+    }
+});
+
 document.getElementById('startButton').addEventListener('click', () => {
     if (!gameRunning) {
         const startMenu = document.getElementById('startMenu');
@@ -73,25 +82,24 @@ document.addEventListener('mousedown', (event) => {
     }
 });
 
+// Inside the createSprites function
 function createSprites() {
-    rocket = new Sprite(10, 500, 5, 0, 50, 50, 'image/rocket.png'); // Maak de raket
+    rocket = new Sprite(10, 500, 5, 0, 50, 50, 'image/rocket.png');
     sprites.push(rocket);
 
     for (let i = 0; i < 10; i++) {
-        const posX = Math.random() * canvasWidth; // Willekeurige X-positie
-        const posY = -50 - Math.random() * 200; // Willekeurige Y-positie boven het canvas
-        const speedX = 0; // Snelheid horizontaal (nul voor recht naar beneden)
-        const speedY = 0.1 + Math.random() * 1; // Willekeurige verticale snelheid
-        const width = 50; // Breedte van de sprite
-        const height = 50; // Hoogte van de sprite
-        const url = 'image/meteor.png'; // URL van het meteorietbeeld
+        const posX = Math.random() * canvasWidth;
+        const posY = -50 - Math.random() * 200;
+        const speedX = 0;
+        const speedY = 0.1 + Math.random() * 1; // Ensure consistent initial speed here
+        const width = 50;
+        const height = 50;
+        const url = 'image/meteor.png';
 
         const sprite = new RotatingSprite(posX, posY, speedX, speedY, width, height, url);
         sprites.push(sprite);
     }
 }
-
-
 let keys = {};
 
 function handleKeyDown(event) {
@@ -189,21 +197,7 @@ function update() {
 
     for (const sprite of sprites) {
         if (sprite !== rocket && !sprite.destroyed && checkCollision(rocket, sprite)) {
-            document.getElementById('scored').style.display = 'block';
-            document.getElementById('points').innerHTML = points;
-            // Display the start menu
-            const startMenu = document.getElementById('startMenu');
-            const game = document.getElementById('game');
-            game.style.display = 'none';
-            startMenu.style.display = 'flex';
-            startMenu.classList.remove('fade-out');
-            gameRunning = false;
-            // Reset canvas and variables
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            bullets = [];
-            sprites = [];
-            points = 0;
-            
+            resetGame();
         }
     }
 }
@@ -237,4 +231,13 @@ function shootBullet() {
     const bulletY = rocket.Y - bulletHeight;
     const bullet = new Bullet(bulletX, bulletY, 0, -bulletSpeed, bulletWidth, bulletHeight, 'blue');
     bullets.push(bullet);
+}
+
+// Inside the resetGame function
+function resetGame() {
+    // Save points to session storage
+    sessionStorage.setItem('points', points);
+
+    // Reload the page
+    location.reload();
 }
