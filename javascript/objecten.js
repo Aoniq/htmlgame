@@ -27,6 +27,7 @@ class RotatingSprite extends Sprite {
         super(posX, posY, speedX, speedY, width, height, url);
         this.rotation = 0; // Initialiseer rotatiehoek
         this.rotationSpeed = Math.random() * 0.1; // Willekeurige rotatiesnelheid
+        this.destroyed = false; // Flag to mark destroyed meteors
     }
 
     update() {
@@ -40,5 +41,11 @@ class RotatingSprite extends Sprite {
         ctx.rotate(this.rotation); // Draai naar de huidige rotatiehoek
         ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height); // Teken de sprite
         ctx.restore(); // Herstel de vorige tekenstatus
+    }
+}
+
+class Bullet extends Sprite {
+    constructor(posX, posY, speedX, speedY, width, height, url) {
+        super(posX, posY, speedX, speedY, width, height, url);
     }
 }

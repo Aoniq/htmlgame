@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Space Game</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.cdnfonts.com/css/super-mario-256" rel="stylesheet">
 </head>
-<body onload="init();">
-    <div id="container">
+<body>
+    <div id="startMenu" class="bg-black">
+        <h1>Space Game</h1>
+        <h2>Press the start button to start the game</h2>
+        <div class="flex">
+            <button id="startButton" class="btn start-btn">Start Game</button>
+
+        </div>
+    </div>
+    <div id="game" style="display: none;">
+        <div id="score" style="font-family: 'Super Mario 256', sans-serif; color: white; position: absolute; top: 20px; left: 20px;">0 Points</div>
         <canvas id="canvas"></canvas>
     </div>
-        <script src="javascript/objecten.js"></script>
-        <script src="javascript/gamescript.js"></script>
+    <script src="javascript/objecten.js"></script>
+    <script src="javascript/gamescript.js"></script>
 </body>
 </html>
